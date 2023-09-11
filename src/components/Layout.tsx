@@ -21,6 +21,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Divider,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -34,8 +35,8 @@ import {
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import Footer from "@components/Footer";
-
 import Header from "@components/Header"
+import Logo from "@components/Logo"
 
 interface LinkItemProps {
   name: string
@@ -53,10 +54,10 @@ interface SidebarProps extends BoxProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { name: 'Profile', icon: FiTrendingUp },
+  // { name: 'Explore', icon: FiCompass },
+  // { name: 'Favourites', icon: FiStar },
+  // { name: 'Settings', icon: FiSettings },
 ]
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -69,18 +70,36 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
+      flexDir="column"
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
-        </Text>
+        <Flex h="20" alignItems="center" justifyContent="space-between">
+          <Logo/>
+          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+            Twitter3
+          </Text>
+        </Flex>
+
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
+
+      <Flex flex={1} justifyContent="space-between" flexDirection="column">
+        <Box flex={1}>
+          {LinkItems.map((link) => (
+            <NavItem key={link.name} icon={link.icon}>
+              {link.name}
+            </NavItem>
+          ))}
+        </Box>
+
+        <Box>
+          <NavItem key='Settings' icon={FiSettings}>
+            Settings
+          </NavItem>
+        </Box>
+
+      </Flex>
+
     </Box>
   )
 }
@@ -127,7 +146,7 @@ const Layout = ({children}: {
 
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'flex' }} />
       <Drawer
         isOpen={isOpen}
         placement="left"
