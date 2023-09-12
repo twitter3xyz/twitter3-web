@@ -54,8 +54,8 @@ interface SidebarProps extends BoxProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome },
+  { name: 'NFTMint', icon: FiCompass },
   { name: 'Profile', icon: FiTrendingUp },
-  // { name: 'Explore', icon: FiCompass },
   // { name: 'Favourites', icon: FiStar },
   // { name: 'Settings', icon: FiSettings },
 ]
@@ -75,7 +75,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Flex h="20" alignItems="center" justifyContent="space-between">
           <Logo/>
-          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+          <Text fontSize="2xl" ml={{base:'5px'}} fontFamily="monospace" fontWeight="bold">
             Twitter3
           </Text>
         </Flex>
