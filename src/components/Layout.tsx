@@ -22,6 +22,7 @@ import {
   MenuItem,
   MenuList,
   Divider,
+  Link
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -41,11 +42,14 @@ import Logo from "@components/Logo"
 interface LinkItemProps {
   name: string
   icon: IconType
+  href?:string
+
 }
 
 interface NavItemProps extends FlexProps {
   icon: IconType
   children: React.ReactNode
+  href?:string
 }
 
 interface SidebarProps extends BoxProps {
@@ -53,9 +57,9 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'NFTMint', icon: FiCompass },
-  { name: 'Profile', icon: FiTrendingUp },
+  { name: 'Home', icon: FiHome,  href:'/' },
+  { name: 'NFTMint', icon: FiCompass, href:'nft-mint' },
+  { name: 'Profile', icon: FiTrendingUp, href:'profile'  },
   // { name: 'Favourites', icon: FiStar },
   // { name: 'Settings', icon: FiSettings },
 ]
@@ -85,10 +89,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
       <Flex flex={1} justifyContent="space-between" flexDirection="column">
         <Box flex={1}>
-          {LinkItems.map((link) => (
-            <NavItem key={link.name} icon={link.icon}>
-              {link.name}
-            </NavItem>
+          {LinkItems.map((link, index) => (
+              <NavItem key={link.name} icon={link.icon} href={ link?.href || '#'}>
+                {link.name}
+              </NavItem>
           ))}
         </Box>
 
@@ -104,11 +108,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   )
 }
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, href, children, ...rest }: NavItemProps) => {
   return (
     <Box
       as="a"
-      href="#"
+      href={href}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}>
       <Flex
