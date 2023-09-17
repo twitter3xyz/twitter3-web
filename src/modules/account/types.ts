@@ -1,0 +1,6 @@
+
+
+enum ACTIONS {
+    OPEN_CONNECT_MODAL,
+    CLOSE_CONNECT_MODAL
+}

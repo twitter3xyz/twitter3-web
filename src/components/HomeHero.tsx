@@ -12,6 +12,8 @@ import {
   useColorModeValue,
   createIcon,
 } from '@chakra-ui/react'
+import ConnectBtn from '@m/account/ConnectBtn'
+
 
 export default function CallToActionWithAnnotation() {
   return (
@@ -42,16 +44,7 @@ export default function CallToActionWithAnnotation() {
             align={'center'}
             alignSelf={'center'}
             position={'relative'}>
-            <Button
-              colorScheme={'green'}
-              bg={'green.400'}
-              rounded={'full'}
-              px={6}
-              _hover={{
-                bg: 'green.500',
-              }}>
-              Connect with Twitter
-            </Button>
+            <ConnectBtn />
             {/*<Button variant={'link'} colorScheme={'blue'} size={'sm'}>*/}
             {/*  Learn more*/}
             {/*</Button>*/}
