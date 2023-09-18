@@ -1,4 +1,3 @@
-
 'use client'
 
 import {
@@ -15,7 +14,7 @@ import {useAAContext } from '@m/account/AAContext'
 
 export const ConnectModal = () => {
 
-    const { state, dispatch } = useAAContext()
+    const { state, dispatch, login } = useAAContext()
     console.log('state',state)
 
     const onClose =()=>{
@@ -35,6 +34,7 @@ export const ConnectModal = () => {
                          bg={'green.400'}
                          rounded={'full'}
                          px={6}
+                         onClick={login}
                          _hover={{
                              bg: 'green.500',
                          }}>
