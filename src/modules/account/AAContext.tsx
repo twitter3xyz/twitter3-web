@@ -6,18 +6,23 @@ import {Web3AuthNoModal} from "@web3auth/no-modal";
 import {EthereumPrivateKeyProvider} from "@web3auth/ethereum-provider";
 import {OpenloginAdapter} from "@web3auth/openlogin-adapter";
 import {CustomChainConfig, WALLET_ADAPTERS} from "@web3auth/base";
-import { ethers, computeAddress, Wallet, getAddress, parseEther, BigNumberish, Interface } from "ethers";
-import { getPublicCompressed } from "@toruslabs/eccrypto";
+import {getPublicCompressed} from "@toruslabs/eccrypto";
+
+import aaConfig from "@config/aa.config";
+import SimpleAccount from "@m/aa/SimpleAccount";
 
 import RPC from "@utils/ethersRPC";
+import localStore from "@utils/localStore";
 
-const AAContext = React.createContext<any>({})
+const AAContext = React.createContext<any>({
+})
 
 export const AAContextProvider = ({children}: { children: ReactNode }) => {
     const initalState: any = {
         isConnectModalOpen: false,
-        user:{},
-        status:'' // connected
+        user: {},
+        status: '', // connected
+        accounts: {}
     }
     const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
 
@@ -42,10 +47,18 @@ export const AAContextProvider = ({children}: { children: ReactNode }) => {
                 return {...state, isConnectModalOpen: false}
             }
             case 'UPDATE_USER_INFO': {
-                return {...state, user: action.data, status:'connected'}
+                return {...state, user: action.data, status: 'connected'}
             }
             case 'LOGOUT': {
-                return {...state, user: {}, status:''}
+                return {...state, user: {}, status: ''}
+            }
+            case 'UPDATE_STATUS': {
+                // todo update related data fields
+                return {...state, status: action.status}
+            }
+            case 'UPDATE_ACCOUNTS': {
+                // todo update related data fields
+                return {...state, accounts: action.accounts}
             }
             default:
                 return {...state}
@@ -73,26 +86,36 @@ export const AAContextProvider = ({children}: { children: ReactNode }) => {
             console.log('need to connect web3auth')
             await connectWeb3Auth()
         }
-        if(!web3auth.provider){
+        if (!web3auth.provider) {
             console.error('web3auth.provider not exists')
             return
         }
 
-        try{
+        await verifyFromServer()
+
+    }, [web3auth, connectWeb3Auth])
+
+    const verifyFromServer = useCallback(async ()=>{
+        if(!web3auth?.provider || !web3auth.connected){
+            console.error('VERIFY_WEB3AUTH_NOT_CONNECTED')
+            return
+        }
+
+        try {
             const rpc = new RPC(web3auth.provider);
             const app_scoped_privkey = await web3auth?.provider?.request({
                 method: "eth_private_key", // use "private_key" for other non-evm chains
             }) as string;
             const app_pub_key = getPublicCompressed(Buffer.from(app_scoped_privkey?.padStart(64, "0"), "hex")).toString("hex");
 
-            console.log('app_pub_key',app_pub_key)
+            console.log('app_pub_key', app_pub_key)
 
             const user = await web3auth?.getUserInfo();
             const address = await rpc.getAccounts();
 
-            console.log('start request:',user, address)
+            console.log('start request:', user, address)
 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_WEB3AUTH_TWITTER3_API}/auth/verify`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/verify`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -113,27 +136,68 @@ export const AAContextProvider = ({children}: { children: ReactNode }) => {
 
             localStorage.setItem('user', JSON.stringify(data))
             dispatch({
-                type:'UPDATE_USER_INFO',
-                user:data
+                type: 'UPDATE_USER_INFO',
+                data
             })
             // check refresh UI
 
-        }catch (e) {
+        } catch (e) {
             console.log('login error:')
             console.error('login error', e)
         }
 
-
-    }, [web3auth, connectWeb3Auth])
+    },[web3auth])
 
     const logout = useCallback(async () => {
         await localStorage.removeItem('user')
         await web3auth?.logout()
-    },[web3auth])
+    }, [web3auth])
 
     const getUserInfo = useCallback(async () => {
         const user = await web3auth?.getUserInfo();
         console.log('getUserInfo', user)
+    }, [web3auth])
+
+
+    const refreshLoginStatus = useCallback(async () => {
+        const status = web3auth?.connected
+        console.log('refreshWeb3authStatus', status)
+
+        if (status) {
+            dispatch({
+                type: 'UPDATE_STATUS',
+                status: 'connected'
+            })
+        } else {
+            dispatch({
+                type: 'UPDATE_STATUS',
+                status: 'disconnected'
+            })
+            logout()
+            return
+        }
+
+        // check access_token
+
+        const accessToken = await localStore.getAccessToken()
+        if(!accessToken){
+           await verifyFromServer()
+        }
+
+    }, [web3auth])
+
+
+    const initAccounts = useCallback(async (privateKey: string) => {
+        const accounts: any = {}
+        for (let key in aaConfig) {
+            accounts[key] = new SimpleAccount()
+            await accounts[key].init(privateKey, aaConfig[key])
+        }
+        dispatch({
+            type: 'UPDATE_ACCOUNTS',
+            accounts
+        })
+
     }, [web3auth])
 
     useEffect(() => {
@@ -155,25 +219,28 @@ export const AAContextProvider = ({children}: { children: ReactNode }) => {
 
                 await web3auth.init();
 
-                console.log('after web3auth init',web3auth.connected)
+                console.log('after web3auth init', web3auth.connected)
 
                 // get user info from local storage
                 const strUser = localStorage.getItem('user')
-                if(strUser){
+                if (strUser) {
                     try {
                         const user = JSON.parse(strUser)
                         dispatch({
-                            type:'UPDATE_USER_INFO',
-                            data:user
+                            type: 'UPDATE_USER_INFO',
+                            data: user
                         })
-                    }catch (e) {
+                    } catch (e) {
                         localStorage.removeItem('user')
                         dispatch({
-                            type:'LOGOUT',
+                            type: 'LOGOUT',
                         })
                         console.log('local user parse error')
                     }
                 }
+
+                // check web3auth and verify status
+                refreshLoginStatus()
 
             } catch (error) {
                 console.error(error);
@@ -181,6 +248,25 @@ export const AAContextProvider = ({children}: { children: ReactNode }) => {
         };
         init();
     }, []);
+
+    // init accounts
+    useEffect(() => {
+         console.log('initAccounts start',web3auth?.connected ,web3auth?.provider)
+        const init = async () => {
+            if (!web3auth?.connected || !web3auth?.provider) return
+
+            const rpc = new RPC(web3auth.provider);
+            const app_scoped_privkey = await web3auth?.provider?.request({
+                method: "eth_private_key", // use "private_key" for other non-evm chains
+            }) as string;
+
+            // init accounts
+            await initAccounts(app_scoped_privkey)
+        }
+        init()
+
+    }, [web3auth?.connected])
+
 
     const contextValue = useMemo(
         () => ({
@@ -190,7 +276,7 @@ export const AAContextProvider = ({children}: { children: ReactNode }) => {
             logout,
             getUserInfo
         }),
-        [state, dispatch, login,logout, getUserInfo]
+        [state, dispatch, login, logout, getUserInfo]
     );
 
     return <AAContext.Provider value={contextValue}>

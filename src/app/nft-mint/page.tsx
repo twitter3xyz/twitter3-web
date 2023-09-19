@@ -1,5 +1,8 @@
+import NFTMintPage from '@m/nft-mint/index'
 
-export  default function NftMint(){
+export default function NftMint() {
 
-  return <div> mint</div>
+    return <>
+        <NFTMintPage/>
+    </>
 }
