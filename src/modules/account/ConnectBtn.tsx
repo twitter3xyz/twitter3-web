@@ -11,13 +11,13 @@ export const ConnectBtn = () => {
         dispatch({type:'OPEN_CONNECT_MODAL'})
     }
     return <Button
-        colorScheme={'green'}
-        bg={'green.400'}
+        colorScheme={'white'}
+        bg={'black'}
         rounded={'full'}
         px={6}
         onClick={openDialog}
         _hover={{
-            bg: 'green.500',
+            bg: 'grey.300',
         }}>
         Connect
     </Button>

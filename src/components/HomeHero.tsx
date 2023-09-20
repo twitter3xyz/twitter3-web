@@ -27,10 +27,11 @@ export default function CallToActionWithAnnotation() {
           <Heading
             fontWeight={600}
             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+            color={'blackAlpha.500'}
             lineHeight={'110%'}>
             Welcome onboard~
             <br />
-            <Text as={'span'} color={'green.400'}>
+            <Text as={'span'} color={'black'}>
               Twitter3
             </Text>
           </Heading>

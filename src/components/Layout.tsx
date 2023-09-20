@@ -58,7 +58,9 @@ interface SidebarProps extends BoxProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome,  href:'/' },
-  { name: 'NFTMint', icon: FiCompass, href:'nft-mint' },
+  { name: 'Free Mint', icon: FiCompass, href:'nft-mint' },
+  { name: 'Twits Mint ', icon: FiCompass, href:'nft-mint' },
+  { name: 'Social Mint ', icon: FiCompass, href:'nft-mint' },
   { name: 'Profile', icon: FiTrendingUp, href:'profile'  },
   // { name: 'Favourites', icon: FiStar },
   // { name: 'Settings', icon: FiSettings },
@@ -123,7 +125,7 @@ const NavItem = ({ icon, href, children, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: 'black',
           color: 'white',
         }}
         {...rest}>

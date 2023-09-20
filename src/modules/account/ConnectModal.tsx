@@ -30,13 +30,13 @@ export const ConnectModal = () => {
                  <ModalCloseButton />
                  <ModalBody>
                      <Button
-                         colorScheme={'green'}
-                         bg={'green.400'}
+                         colorScheme={'white'}
+                         bg={'black'}
                          rounded={'full'}
                          px={6}
                          onClick={login}
                          _hover={{
-                             bg: 'green.500',
+                             bg: 'black',
                          }}>
                          Connect With twitter
                      </Button>
