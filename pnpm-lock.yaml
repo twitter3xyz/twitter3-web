@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@account-abstraction/contracts':
+    specifier: ^0.6.0
+    version: 0.6.0
   '@chakra-ui/next-js':
     specifier: ^2.1.5
     version: 2.1.5(@chakra-ui/react@2.8.1)(@emotion/react@11.11.1)(next@13.4.19)(react@18.2.0)
@@ -89,6 +92,10 @@ packages:
   /@aashutoshrathi/word-wrap@1.2.6:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /@account-abstraction/contracts@0.6.0:
+    resolution: {integrity: sha512-8ooRJuR7XzohMDM4MV34I12Ci2bmxfE9+cixakRL7lA4BAwJKQ3ahvd8FbJa9kiwkUPCUNtj+/zxDQWYYalLMQ==}
     dev: false
 
   /@adraffy/ens-normalize@1.9.2:

@@ -15,7 +15,7 @@ type VerifyingPaymasterResult = {
 
 // default for stack up
 const pmContext = {
-    type: "payg"
+    // type: "payg"
 };
 
 export const getPaymasterMiddleware = (aaConfig: Pick<AA_CONFIG, 'pmUrl'>) => {
@@ -56,9 +56,9 @@ export const getPaymasterMiddleware = (aaConfig: Pick<AA_CONFIG, 'pmUrl'>) => {
             throw pData?.error.message
         } else if (pData.result) {
             ctx.op.paymasterAndData = pData.result.paymasterAndData;
-            ctx.op.preVerificationGas = pData.result.preVerificationGas;
-            ctx.op.verificationGasLimit = pData.result.verificationGasLimit;
-            ctx.op.callGasLimit = pData.result.callGasLimit;
+            // ctx.op.preVerificationGas = pData.result.preVerificationGas;
+            // ctx.op.verificationGasLimit = pData.result.verificationGasLimit;
+            // ctx.op.callGasLimit = pData.result.callGasLimit;
         } else {
             throw new Error('invalid return format')
         }

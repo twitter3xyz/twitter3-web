@@ -19,16 +19,17 @@ import {
     useDisclosure
 } from '@chakra-ui/react'
 import {useAAContext} from '@m/account/AAContext'
+import {lineaGoerliSimple} from "@config/aa.config";
 
 export default function NFTMintPage() {
     const {isOpen, onOpen, onClose} = useDisclosure()
 
     const {state} = useAAContext()
 
-    // const test =async ()=>{
-    //     console.log('hello',state)
-    //     await state.accounts.baseGoerliSimple?.transferNative('0x6161380587233D9b2D7b82aE506FA79181B42Bdf','0')
-    // }
+    const test =async ()=>{
+        console.log('hello',state)
+        await state.accounts.lineaGoerliSimple?.transferNative('0x6161380587233D9b2D7b82aE506FA79181B42Bdf','0')
+    }
 
     const IMAGE =
 'https://assets.onchainsummer.xyz/Final_Art-Fini.png'
@@ -95,7 +96,7 @@ export default function NFTMintPage() {
                             bg={'black'}
                             rounded={'full'}
                             px={6}
-                            onClick={onOpen}
+                            onClick={test}
                             _hover={{
                                 bg: 'grey.500',
                             }}
