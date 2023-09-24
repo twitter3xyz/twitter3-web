@@ -31,8 +31,7 @@ export default function NFTMintPage() {
         await state.accounts.lineaGoerliSimple?.transferNative('0x6161380587233D9b2D7b82aE506FA79181B42Bdf','0')
     }
 
-    const IMAGE =
-'https://assets.onchainsummer.xyz/Final_Art-Fini.png'
+    const IMAGE = '/twitte3-card.svg'
     return <>
 
         <Center py={12}>
