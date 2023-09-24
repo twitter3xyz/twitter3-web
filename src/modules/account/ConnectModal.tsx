@@ -8,9 +8,14 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Button
+    Button,
+    Center,
+    Text
 } from '@chakra-ui/react'
+import { FaSquareTwitter, FaTwitter } from "react-icons/fa6";
+
 import {useAAContext } from '@m/account/AAContext'
+
 
 export const ConnectModal = () => {
 
@@ -23,22 +28,29 @@ export const ConnectModal = () => {
     }
 
      return (<>
-         <Modal isOpen={state.isConnectModalOpen} onClose={onClose}>
+         <Modal isOpen={state.isConnectModalOpen}
+                onClose={onClose}
+                motionPreset='slideInBottom'
+                isCentered
+         >
              <ModalOverlay />
              <ModalContent>
-                 <ModalHeader>Connect</ModalHeader>
+                 <ModalHeader> <Center>Connect</Center></ModalHeader>
                  <ModalCloseButton />
                  <ModalBody>
                      <Button
-                         colorScheme={'white'}
-                         bg={'black'}
+                         size='md'
+                         colorScheme={'black'}
                          rounded={'full'}
+                         variant={'outline'}
+                         w={'full'}
                          px={6}
                          onClick={login}
-                         _hover={{
-                             bg: 'black',
-                         }}>
-                         Connect With twitter
+                         leftIcon={<FaTwitter color={'twitter.600'}  />}
+                         >
+                         <Center>
+                             <Text>Sign in with Twitter</Text>
+                         </Center>
                      </Button>
                  </ModalBody>
 

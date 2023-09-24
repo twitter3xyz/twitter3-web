@@ -95,7 +95,7 @@ export default function NFTMintPage() {
                             bg={'black'}
                             rounded={'full'}
                             px={6}
-                            onClick={test}
+                            onClick={onOpen}
                             _hover={{
                                 bg: 'grey.500',
                             }}
@@ -106,7 +106,11 @@ export default function NFTMintPage() {
         </Center>
 
 
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen}
+               onClose={onClose}
+               motionPreset='slideInBottom'
+               isCentered
+        >
             <ModalOverlay/>
             <ModalContent>
                 <ModalHeader>Modal Title</ModalHeader>
